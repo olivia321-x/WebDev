@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Postingan</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4 d-flex justify-content-between align-items-center">
+        Dashboard Postingan
+        <a href="{% url 'post_create' %}" class="btn btn-success">
+          + Tambah Postingan Baru
+        </a>
+      </h1>
+
+      {% for row_posts in grouped_posts %}
+      <div class="row mb-4">
+        {% for post in row_posts %}
+
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card h-100 shadow-sm custom-card">
+            {% if post.image %}
+            <img
+              src="{{ post.image.url }}"
+              class="card-img-top post-image"
+              alt="{{ post.nama }}"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/placeholder.png' %}"
+              class="card-img-top post-image"
+              alt="No Image"
+            />
+            {% endif %}
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ post.nama }}</h5>
+              <p class="card-text small text-muted">
+                <strong>Author:</strong> {{ post.author }}<br />
+                <strong>Rating:</strong> {{ post.get_rating_display }}<br />
+                <small
+                  >Diunggah: {{ post.uploaded_date|date:"d M Y, H:i" }}</small
+                >
+              </p>
+
+              <div class="mt-auto">
+                <a
+                  href="{% url 'post_edit' pk=post.pk %}"
+                  class="btn btn-primary btn-sm w-100"
+                  >Edit</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% empty %}
+      <div class="alert alert-info" role="alert">
+        Belum ada postingan yang tersedia.
+      </div>
+      {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
